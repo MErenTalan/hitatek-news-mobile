@@ -1,13 +1,6 @@
-// src/components/Navbar.js
+// src/components/MobileNavbar.js
 import React, {useState} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  Image,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import {View, TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
 import {NavbarLinkType} from '../helpers/types';
 
 const navbarLinks: NavbarLinkType[] = [
@@ -46,7 +39,7 @@ const navbarLinks: NavbarLinkType[] = [
   },
 ];
 
-const Navbar = () => {
+const MobileNavbar = () => {
   const [isMobileMenuShown, setIsMobileMenuShown] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -55,23 +48,29 @@ const Navbar = () => {
 
   return (
     <>
-      <ScrollView
-        horizontal={true}
-        style={styles.container}
-        contentContainerStyle={{
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
+      <View style={styles.container}>
         <View style={styles.linksContainer}>
+          <TouchableOpacity
+            onPress={toggleMobileMenu}
+            style={styles.hamburgerIcon}>
+            <Image
+              source={require('../images/hamburger.png')}
+              style={styles.iconImage}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+      {isMobileMenuShown && (
+        <View style={styles.mobileMenuContainer}>
           {navbarLinks.map(link => (
-            <TouchableOpacity key={link.title} style={styles.link}>
-              {link.iconPosition === 'left' && link.icon}
-              <Text style={styles.linkText}>{link.title}</Text>
-              {link.iconPosition === 'right' && link.icon}
+            <TouchableOpacity key={link.title} style={styles.mobileMenuItem}>
+              {link.icon}
+              <Text style={styles.mobileMenuItemText}>{link.title}</Text>
             </TouchableOpacity>
           ))}
         </View>
-      </ScrollView>
+      )}
     </>
   );
 };
@@ -81,21 +80,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#007BFF',
     height: 56,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
     paddingHorizontal: 16,
   },
   linksContainer: {
     flexDirection: 'row',
   },
-  link: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
+  hamburgerIcon: {
     paddingHorizontal: 16,
+    paddingVertical: 12,
   },
-  linkText: {
-    color: 'white',
-    fontSize: 16,
-    marginLeft: 6,
+  iconImage: {
+    width: 20,
+    height: 20,
+  },
+  mobileMenuContainer: {
+    position: 'absolute',
+    top: 56,
+    left: 0,
+    right: 0,
+    backgroundColor: '#007BFF',
+    paddingVertical: 12,
+    zIndex: 999,
   },
   mobileMenuItem: {
     flexDirection: 'row',
@@ -110,4 +117,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Navbar;
+export default MobileNavbar;
